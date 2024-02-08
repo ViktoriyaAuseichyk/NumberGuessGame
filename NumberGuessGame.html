@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson_13.5</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div>The game guesses a number from 1 to 99. Guess that number.</div><br>
+    <div id="text-attempt">Attempt No. <span id="attempt"></span></div>
+    <div id="game-container">
+        <input id="input-number" type="text" minlength="1" maxlength="2">
+        <div id="сompare-mark">?</div>
+        <div id="guessed-number">?</div>      
+    </div><br>
+    <button id="check">CHECK</button> 
+    <button id="new-game">NEW GAME</button>  
+    <script>
+        /*
+        "Игра 'Угадай число'". Суть игры - угадать за меньшее количество попыток число, которое загадал сценарий.
+        Каждый раз, когда игрок пытается угадать число, сценарий выводит подсказку - меньшее или большее число было загадано сценарием.
+        Сценарий загадывает число только один раз в начале игры и это число не меняется до завершения игры.
+        При завершении игры сценарий выведит пользователю информацию о том, с какой попытки угадано значение и сколько было потрачено на это времени.
+        */
+
+        let attemptSpan = document.querySelector("#attempt"); 
+        let gameСontainerDiv = document.querySelector("#game-container");
+        let inputNumberInput = document.querySelector("#input-number"); 
+        let сompareMarkDiv = document.querySelector("#сompare-mark"); 
+        let guessedNumberDiv = document.querySelector("#guessed-number"); 
+        let checkBtn = document.querySelector("#check"); 
+        let newGameBtn = document.querySelector("#new-game"); 
+
+        let guessedNumber = Math.floor(Math.random() * 101);
+        //console.log(guessedNumber);
+        let count = 1;
+
+
+        inputNumberInput.addEventListener("input", function() {
+            this.value = this.value.replace(/[^0-9]/, "");
+        });
+
+        checkBtn.addEventListener("click", function() { 
+            if (inputNumberInput.value.length != 0)
+            {
+                let inputNumber = +inputNumberInput.value;
+                if (inputNumber > guessedNumber)
+                {
+                    gameСontainerDiv.style.border = "1px solid red";
+                    inputNumberInput.style.border ="2px solid red";
+                    сompareMarkDiv.innerHTML = ">"; 
+                    count++;
+                }
+                else if (inputNumber < guessedNumber)
+                {
+                    gameСontainerDiv.style.border ="1px solid red";
+                    inputNumberInput.style.border ="2px solid red";
+                    сompareMarkDiv.innerHTML = "<"; 
+                    count++;
+                }
+                else
+                {
+                    gameСontainerDiv.style.border ="2px solid green";
+                    inputNumberInput.style.border ="2px solid black";
+                    сompareMarkDiv.innerHTML = "="; 
+                    guessedNumberDiv.innerHTML = guessedNumber;
+                    attemptSpan.innerHTML = count;
+                    inputNumberInput.setAttribute("readonly", "readonly");
+                }
+            }
+            else
+            {
+                inputNumberInput.style.border ="2px solid red";
+                сompareMarkDiv.innerHTML = "?";
+            }
+        })
+
+        inputNumberInput.addEventListener("click", function() {
+            if (!inputNumberInput.hasAttribute("readonly"))
+            {
+                сompareMarkDiv.innerHTML = "?";
+                inputNumberInput.value = "";
+                gameСontainerDiv.style.border = "1px solid black";
+            }
+        })
+
+        newGameBtn.addEventListener("click", function() { 
+            gameСontainerDiv.style.border ="1px solid black";
+            inputNumberInput.value = "";
+            inputNumberInput.style.border ="2px solid black";
+            сompareMarkDiv.innerHTML = "?";
+            guessedNumberDiv.innerHTML = "?";
+            attemptSpan.innerHTML = "";
+            inputNumberInput.removeAttribute("readonly");
+            guessedNumber = Math.floor(Math.random() * 101);
+            console.log(guessedNumber); 
+            count = 1;
+        })
+
+
+    </script>
+</body>
+
+</html>
