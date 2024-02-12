@@ -54,3 +54,8 @@ body {
     border: 0px;
     font-size: 25px;
 }
+#victory-message { 
+    font-size: 25px;
+    color: green;
+    margin-left: 60px;
+}

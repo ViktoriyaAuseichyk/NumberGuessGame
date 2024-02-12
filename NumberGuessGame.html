@@ -17,7 +17,8 @@
         <div id="guessed-number">?</div>      
     </div><br>
     <button id="check">CHECK</button> 
-    <button id="new-game">NEW GAME</button>  
+    <button id="new-game">NEW GAME</button> 
+    <div id="victory-message" hidden>You guessed it!</div> 
     <script>
         /*
         "Игра 'Угадай число'". Суть игры - угадать за меньшее количество попыток число, которое загадал сценарий.
@@ -25,7 +26,7 @@
         Сценарий загадывает число только один раз в начале игры и это число не меняется до завершения игры.
         При завершении игры сценарий выведит пользователю информацию о том, с какой попытки угадано значение и сколько было потрачено на это времени.
         */
-
+        
         let attemptSpan = document.querySelector("#attempt"); 
         let gameСontainerDiv = document.querySelector("#game-container");
         let inputNumberInput = document.querySelector("#input-number"); 
@@ -33,17 +34,28 @@
         let guessedNumberDiv = document.querySelector("#guessed-number"); 
         let checkBtn = document.querySelector("#check"); 
         let newGameBtn = document.querySelector("#new-game"); 
+        let victoryMessage = document.querySelector("#victory-message");
 
         let guessedNumber = Math.floor(Math.random() * 101);
-        //console.log(guessedNumber);
+        console.log(guessedNumber);
         let count = 1;
-
 
         inputNumberInput.addEventListener("input", function() {
             this.value = this.value.replace(/[^0-9]/, "");
         });
 
-        checkBtn.addEventListener("click", function() { 
+        document.addEventListener("keydown", function(e) {
+            if (e.code == "Enter") checkNumber();
+        })
+
+        checkBtn.addEventListener("click", checkNumber)
+
+        inputNumberInput.addEventListener("click", resetView)
+
+        newGameBtn.addEventListener("click", resetGame)
+
+
+        function checkNumber() {
             if (inputNumberInput.value.length != 0)
             {
                 let inputNumber = +inputNumberInput.value;
@@ -69,6 +81,7 @@
                     guessedNumberDiv.innerHTML = guessedNumber;
                     attemptSpan.innerHTML = count;
                     inputNumberInput.setAttribute("readonly", "readonly");
+                    victoryMessage.removeAttribute("hidden"); 
                 }
             }
             else
@@ -76,30 +89,29 @@
                 inputNumberInput.style.border ="2px solid red";
                 сompareMarkDiv.innerHTML = "?";
             }
-        })
+        }
 
-        inputNumberInput.addEventListener("click", function() {
-            if (!inputNumberInput.hasAttribute("readonly"))
-            {
-                сompareMarkDiv.innerHTML = "?";
-                inputNumberInput.value = "";
-                gameСontainerDiv.style.border = "1px solid black";
-            }
-        })
-
-        newGameBtn.addEventListener("click", function() { 
-            gameСontainerDiv.style.border ="1px solid black";
-            inputNumberInput.value = "";
+        function resetGame() { 
+            
+            victoryMessage.setAttribute("hidden", "hidden"); 
             inputNumberInput.style.border ="2px solid black";
-            сompareMarkDiv.innerHTML = "?";
             guessedNumberDiv.innerHTML = "?";
             attemptSpan.innerHTML = "";
             inputNumberInput.removeAttribute("readonly");
             guessedNumber = Math.floor(Math.random() * 101);
             console.log(guessedNumber); 
             count = 1;
-        })
+            resetView();
+        }                 
 
+        function resetView() {
+            if (!inputNumberInput.hasAttribute("readonly"))
+            {
+                сompareMarkDiv.innerHTML = "?";
+                inputNumberInput.value = "";
+                gameСontainerDiv.style.border = "1px solid black";
+            }
+        }
 
     </script>
 </body>
